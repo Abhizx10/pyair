@@ -11,10 +11,10 @@ def play():
 
   try:
     while True:
-      print("Playing Audio Track, press Ctlr + C to stop")
+      print("Playing radio station, press Ctlr + C to stop")
       input("")
   except KeyboardInterrupt:
-      print("Stopping audio track")
+      print("Stopped playing radio station")
       p.stop()
       sys.exit()
 
