@@ -24,6 +24,7 @@ def get_latest_episode_url(rssFeed,id):
         title = soup.find('title')
         if(not(id == "11")):
             title = title.find_next('title')
+        break
     print("\nEpisode Title :",title.find_next('title').contents[0])
 
     return(tag.get('url',None))
@@ -50,7 +51,7 @@ def play(id):
     if(not(radio)):
         choice = input("\nDo you want to play this episode?(y/n): ")
         if(choice =='n'):
-            mainMenu()
+            main_menu()
     p = vlc.MediaPlayer(url)
     p.play()
 
@@ -64,7 +65,7 @@ def play(id):
                 p.play()
             elif i == 'm':
                 p.stop()
-                mainMenu()
+                main_menu()
     except KeyboardInterrupt:
         print("Stopped playing the streaming station")
         p.stop()
