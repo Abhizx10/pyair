@@ -32,7 +32,7 @@ def get_latest_episode_url(rssFeed,id):
 
 def play(id):
     """ Function to handle media player selection """
-    is_found = False                   # Is stream ID found? 
+    is_found = False                   # Is stream ID found?
     radio = False
     with open('links.txt') as f:
         for line in f:
@@ -52,26 +52,33 @@ def play(id):
         choice = input("\nDo you want to play this episode?(y/n): ")
         if(choice =='n'):
             main_menu()
-    p = vlc.MediaPlayer(url)
-    p.play()
+    player = vlc.MediaPlayer(url)
+    player.play()
 
     try:
         while True:
-            print("\nPlaying Audio Track, press p to pause, c to continue, m to go back to main menu and Ctlr + C to stop\n")
+            print("\nPlaying Audio Track, press p to pause, c to continue,"
+            +",s to seek, m to go back to main menu and ctlr + c to stop\n")
             i = input("")
             if i=='p':
-                p.pause()
+                player.pause()
+                print("Current runtime percentage : ",round(player.get_position()*100,2),"%")
             elif i=='c':
-                p.play()
+                player.play()
             elif i == 'm':
-                p.stop()
+                player.stop()
                 main_menu()
+            elif i == 's':
+                player.pause()
+                s = input("Enter seek position between 0 and 1.0 : ")
+                player.set_position(float(s))
+                player.play()
     except KeyboardInterrupt:
         print("Stopped playing the streaming station")
-        p.stop()
+        player.stop()
         sys.exit()
 
-    
+
 
 def main_menu():
     """ Display the main menu """
