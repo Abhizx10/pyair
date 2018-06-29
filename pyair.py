@@ -1,10 +1,11 @@
 """ Python script to play internet radio station and podcasts in VLC """
 
+import datetime
+import time
 import sys
 import ssl
 
 from bs4 import BeautifulSoup
-from urllib.request import urlopen
 import vlc
 
 
@@ -57,9 +58,16 @@ def play(id):
 
     try:
         while True:
-            print("\nPlaying Audio Track, press p to pause, c to continue,"
-            +",s to seek, m to go back to main menu and ctlr + c to stop\n")
-            i = input("")
+            print("\nPlaying Audio Track...\n")
+            print("~~Media Player Controls~~")
+            print("p - Pause")
+            print("c - Continue")
+            print("s - Seek")
+            print("i - Information about current track")
+            print("m - Go back to main menu")
+            print("w - Write track information to file")
+            print("q - Quit")
+            i = input("\nEnter Choice: ")
             if i=='p':
                 player.pause()
                 print("Current runtime percentage : ",round(player.get_position()*100,2),"%")
@@ -73,11 +81,26 @@ def play(id):
                 s = input("Enter seek position between 0 and 1.0 : ")
                 player.set_position(float(s))
                 player.play()
+            elif i == 'i':
+                media = player.get_media()
+                print("\nCurrent playing track: "+str(media.get_meta(12)))
+            elif i =='w':
+                with open("Tracks_list.txt","a+") as f:
+                    ts = time.time()
+                    f.write(media.get_meta(12))
+                    f.write(" | ")
+                    f.write(datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S'))
+                    f.write("\n")
+                f.close()
+                print("\nWritten current running track information to file..")
+            elif i =='q':
+                print("\nStopped playing the streaming station\n")
+                player.stop()
+                sys.exit()
     except KeyboardInterrupt:
         print("Stopped playing the streaming station")
         player.stop()
         sys.exit()
-
 
 
 def main_menu():
@@ -87,13 +110,14 @@ def main_menu():
         print('~~~~ Welcome to your media streaming ~~~~~')
         print('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
         print('Enter the number to play the stream')
-        print('\nCategory: Music -\n')
+        print('\nCategory: Music + Radio -\n')
         print('01.  Studio Brussel')
         print('02.  BBC Radio One')
         print('03.  Tunein Today\'s Hits')
         print('04.  All Songs Considered Podcast')
         print('05.  Desert Island Discs')
         print('06.  Song Exploder')
+        print('07.  De Afrekening')
         print('\nCategory: Curosity -\n')
         print('10.  Reply All')
         print('11.  Freakonomics')
