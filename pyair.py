@@ -4,6 +4,7 @@ import datetime
 import time
 import sys
 import ssl
+from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 import vlc
