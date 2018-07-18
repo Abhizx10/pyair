@@ -5,6 +5,7 @@
 05 DesertIslandDiscs https://podcasts.files.bbci.co.uk/b006qnmr.rss p
 06 SongExploder http://feed.songexploder.net/SongExploder p
 07 DeAfreekening http://services.vrt.be/ondemand/podcasts/e2889321-90d2-11e3-b45a-00163edf75b7?accept=application/xml p
+08 LoFiHipHop http://hyades.shoutca.st:8043/stream r
 10 ReplyAll http://feeds.gimletmedia.com/hearreplyall p
 11 Freakonomics http://feeds.feedburner.com/freakonomicsradio p
 12 PlanetMoney https://www.npr.org/rss/podcast.php?id=510289 p

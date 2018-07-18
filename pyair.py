@@ -8,6 +8,7 @@ from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 import vlc
+import lyricwikia
 
 
 def get_latest_episode_url(rssFeed,id):
@@ -31,6 +32,14 @@ def get_latest_episode_url(rssFeed,id):
 
     return(tag.get('url',None))
 
+def get_media_info(player):
+  """ Function to fetch the current playing track and artist information"""
+  media = player.get_media()
+  info = str(media.get_meta(12))
+  info = info.split("-")
+  artist = info[0]
+  track = info[1]
+  return artist,track
 
 def play(id):
     """ Function to handle media player selection """
@@ -66,6 +75,7 @@ def play(id):
             print("s - Seek")
             print("i - Information about current track")
             print("m - Go back to main menu")
+            print("l - See track lyrics")
             print("w - Write track information to file")
             print("q - Quit")
             i = input("\nEnter Choice: ")
@@ -83,8 +93,19 @@ def play(id):
                 player.set_position(float(s))
                 player.play()
             elif i == 'i':
-                media = player.get_media()
-                print("\nCurrent playing track: "+str(media.get_meta(12)))
+                try:
+                  artist,track = get_media_info(player)
+                  print("\nCurrent playing track -"+track+" by "+artist)
+                except:
+                  print("Could not find media information")
+            elif i == 'l':
+                try:
+                  artist,track = get_media_info(player)
+                  print("~~~ Song Lyrics ~~~\n")
+                  print(lyricwikia.get_lyrics(artist, track))
+                  print("~~~~~~~~~~~~~~~~~~~\n")
+                except:
+                  print("Could not find lyrics")
             elif i =='w':
                 with open("Tracks_list.txt","a+") as f:
                     ts = time.time()
@@ -119,6 +140,7 @@ def main_menu():
         print('05.  Desert Island Discs')
         print('06.  Song Exploder')
         print('07.  De Afrekening')
+        print('08.  LoFi HipHop')
         print('\nCategory: Curosity -\n')
         print('10.  Reply All')
         print('11.  Freakonomics')
