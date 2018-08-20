@@ -11,7 +11,7 @@ import vlc
 import lyricwikia
 
 
-def get_latest_episode_url(rssFeed,id):
+def get_latest_episode_url(rssFeed, id):
     """ Function to scrap the latest podcast url and title"""
     # Ignore SSL certificate errors
     ctx = ssl.create_default_context()
@@ -28,18 +28,20 @@ def get_latest_episode_url(rssFeed,id):
         if(not(id == "11")):
             title = title.find_next('title')
         break
-    print("\nEpisode Title :",title.find_next('title').contents[0])
+    print("\nEpisode Title :", title.find_next('title').contents[0])
 
-    return(tag.get('url',None))
+    return(tag.get('url', None))
+
 
 def get_media_info(player):
-  """ Function to fetch the current playing track and artist information"""
-  media = player.get_media()
-  info = str(media.get_meta(12))
-  info = info.split("-")
-  artist = info[0]
-  track = info[1]
-  return artist,track
+    """ Function to fetch the current playing track and artist information"""
+    media = player.get_media()
+    info = str(media.get_meta(12))
+    info = info.split("-")
+    artist = info[0]
+    track = info[1]
+    return artist, track
+
 
 def play(id):
     """ Function to handle media player selection """
@@ -51,17 +53,17 @@ def play(id):
                 link = line.split()
                 url = link[2]
                 is_found = True
-                if(link[3]=='r'):
-                  radio = True
+                if(link[3] == 'r'):
+                    radio = True
                 else:
-                  url = get_latest_episode_url(url,id)
+                    url = get_latest_episode_url(url, id)
     if(not(is_found)):
         print('\nInvalid Input!\n')
         main_menu()
 
     if(not(radio)):
         choice = input("\nDo you want to play this episode?(y/n): ")
-        if(choice =='n'):
+        if(choice == 'n'):
             main_menu()
     player = vlc.MediaPlayer(url)
     player.play()
@@ -79,10 +81,11 @@ def play(id):
             print("w - Write track information to file")
             print("q - Quit")
             i = input("\nEnter Choice: ")
-            if i=='p':
+            if i == 'p':
                 player.pause()
-                print("Current runtime percentage : ",round(player.get_position()*100,2),"%")
-            elif i=='c':
+                print("Current runtime percentage : ", 
+                    round(player.get_position()*100, 2), "%")
+            elif i == 'c':
                 player.play()
             elif i == 'm':
                 player.stop()
@@ -94,28 +97,29 @@ def play(id):
                 player.play()
             elif i == 'i':
                 try:
-                  artist,track = get_media_info(player)
-                  print("\nCurrent playing track -"+track+" by "+artist)
+                    artist, track = get_media_info(player)
+                    print("\nCurrent playing track -"+track+" by "+artist)
                 except:
-                  print("Could not find media information")
+                    print("Could not find media information")
             elif i == 'l':
                 try:
-                  artist,track = get_media_info(player)
-                  print("~~~ Song Lyrics ~~~\n")
-                  print(lyricwikia.get_lyrics(artist, track))
-                  print("~~~~~~~~~~~~~~~~~~~\n")
+                    artist, track = get_media_info(player)
+                    print("~~~ Song Lyrics ~~~\n")
+                    print(lyricwikia.get_lyrics(artist, track))
+                    print("~~~~~~~~~~~~~~~~~~~\n")
                 except:
-                  print("Could not find lyrics")
-            elif i =='w':
-                with open("Tracks_list.txt","a+") as f:
+                    print("Could not find lyrics")
+            elif i == 'w':
+                with open("Tracks_list.txt", "a+") as f:
                     ts = time.time()
                     f.write(media.get_meta(12))
                     f.write(" | ")
-                    f.write(datetime.datetime.fromtimestamp(ts).strftime('%Y-%m-%d %H:%M:%S'))
+                    f.write(datetime.datetime.fromtimestamp(ts)
+                            .strftime('%Y-%m-%d %H:%M:%S'))
                     f.write("\n")
                 f.close()
                 print("\nWritten current running track information to file..")
-            elif i =='q':
+            elif i == 'q':
                 print("\nStopped playing the streaming station\n")
                 player.stop()
                 sys.exit()
@@ -141,7 +145,7 @@ def main_menu():
         print('06.  Song Exploder')
         print('07.  De Afrekening')
         print('08.  LoFi HipHop')
-        print('\nCategory: Curosity -\n')
+        print('\nCategory: Curiosity -\n')
         print('10.  Reply All')
         print('11.  Freakonomics')
         print('12.  Planet Money')
@@ -155,6 +159,7 @@ def main_menu():
         play(id)
     except KeyboardInterrupt:
         sys.exit()
+
 
 if __name__ == '__main__':
     main_menu()
