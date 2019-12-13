@@ -40,6 +40,7 @@ def get_media_info(player):
     info = info.split("-")
     artist = info[0]
     track = info[1]
+    print(track)
     return artist, track
 
 
